@@ -1,0 +1,18 @@
+{
+  "name": "image-wall-upload-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "dependencies": {
+    "exif-js": "^2.1.1",
+    "pica": "^2.0.2"
+  },
+  "devDependencies": {
+    "browserify": "^13.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify app.js > app.built.js"
+  },
+  "license": "ISC"
+}
