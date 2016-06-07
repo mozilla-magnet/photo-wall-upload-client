@@ -4,6 +4,7 @@
  * Dependencies
  */
 
+var UPLOAD_URL = require('./config.json').upload_url;
 var exif = require('exif-js');
 var pica = require('pica');
 
@@ -264,20 +265,8 @@ function upload(file, callback) {
   var xhr = new XMLHttpRequest();
 
   formData.append('image', file);
-  xhr.open('POST', 'http://10.246.27.23:3003/api/v1/images', true);
+  xhr.open('POST', UPLOAD_URL, true);
   xhr.send(formData);
-
-  xhr.onprogress = function(e) {
-    console.log(e.loaded + '/' + e.total);
-  };
-
-  xhr.onerror = function() {
-    console.log('error', xhr);
-  };
-
-  xhr.onload = function() {
-    console.log('load');
-  };
 
   xhr.onreadystatechange = function() {
     if (xhr.readyState !== XMLHttpRequest.DONE) return;

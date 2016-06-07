@@ -5,6 +5,7 @@
  * Dependencies
  */
 
+var UPLOAD_URL = require('./config.json').upload_url;
 var exif = require('exif-js');
 var pica = require('pica');
 
@@ -265,20 +266,8 @@ function upload(file, callback) {
   var xhr = new XMLHttpRequest();
 
   formData.append('image', file);
-  xhr.open('POST', 'http://10.246.27.23:3003/api/v1/images', true);
+  xhr.open('POST', UPLOAD_URL, true);
   xhr.send(formData);
-
-  xhr.onprogress = function(e) {
-    console.log(e.loaded + '/' + e.total);
-  };
-
-  xhr.onerror = function() {
-    console.log('error', xhr);
-  };
-
-  xhr.onload = function() {
-    console.log('load');
-  };
 
   xhr.onreadystatechange = function() {
     if (xhr.readyState !== XMLHttpRequest.DONE) return;
@@ -298,7 +287,13 @@ function dataUriToBlob(string) {
 }
 
 new App(document.querySelector('.app'));
-},{"exif-js":2,"pica":5}],2:[function(require,module,exports){
+
+},{"./config.json":2,"exif-js":3,"pica":6}],2:[function(require,module,exports){
+module.exports={
+  "upload_url": "http://localhost:3003/api/v1/images"
+}
+
+},{}],3:[function(require,module,exports){
 (function() {
 
     var debug = false;
@@ -1105,7 +1100,7 @@ new App(document.querySelector('.app'));
 }.call(this));
 
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 // Calculate Gaussian blur of an image using IIR filter
 // The method is taken from Intel's white paper and code example attached to it:
 // https://software.intel.com/en-us/articles/iir-gaussian-blur-filter
@@ -1226,7 +1221,7 @@ function blurMono16(src, width, height, radius) {
 
 module.exports = blurMono16;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 /* eslint-disable no-unused-vars */
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -1311,7 +1306,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 /*global window, document*/
@@ -1450,7 +1445,7 @@ exports.WW = WORKER;
 exports.WEBGL = false; // WEBGL;
 exports.debug = function () {};
 
-},{"./lib/js/resize_array":9,"./lib/js/unsharp":10,"./lib/resize_js":13,"./lib/resize_js_ww":14,"./lib/resize_webgl":15,"object-assign":4,"webworkify":16}],6:[function(require,module,exports){
+},{"./lib/js/resize_array":10,"./lib/js/unsharp":11,"./lib/resize_js":14,"./lib/resize_js_ww":15,"./lib/resize_webgl":16,"object-assign":5,"webworkify":17}],7:[function(require,module,exports){
 'use strict';
 
 /* global document */
@@ -1459,7 +1454,7 @@ module.exports = function () {
   return document.createElement('canvas');
 };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var lastId = 1;
@@ -1468,7 +1463,7 @@ module.exports = function () {
   return lastId++;
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 var IDLE = 2000;
@@ -1530,7 +1525,7 @@ Pool.prototype.gc = function () {
 
 module.exports = Pool;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 // High speed resize with tuneable speed/quality ratio
 
 'use strict';
@@ -1854,7 +1849,7 @@ function resize(options) {
 
 module.exports = resize;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 // Unsharp mask filter
 //
 // http://stackoverflow.com/a/23322820/1031804
@@ -1988,7 +1983,7 @@ function unsharp(img, width, height, amount, radius, threshold) {
 module.exports = unsharp;
 module.exports.lightness = getLightness;
 
-},{"glur/mono16":3}],11:[function(require,module,exports){
+},{"glur/mono16":4}],12:[function(require,module,exports){
 'use strict';
 
 module.exports.createRegions = function createRegions(options) {
@@ -2082,7 +2077,7 @@ module.exports.eachLimit = function eachLimit(list, limit, iterator, callback) {
   }
 };
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 // Web Worker wrapper for image resize function
 
 'use strict';
@@ -2106,7 +2101,7 @@ module.exports = function(self) {
   };
 };
 
-},{"./resize_array":9,"./unsharp":10}],13:[function(require,module,exports){
+},{"./resize_array":10,"./unsharp":11}],14:[function(require,module,exports){
 /*eslint space-infix-ops:0*/
 
 'use strict';
@@ -2193,7 +2188,7 @@ function resize_js(from, to, options, callback) {
 module.exports = resize_js;
 module.exports.terminate = function () {};
 
-},{"./js/create_canvas":6,"./js/generate_id":7,"./js/resize_array":9,"./js/unsharp":10,"./js/utils":11}],14:[function(require,module,exports){
+},{"./js/create_canvas":7,"./js/generate_id":8,"./js/resize_array":10,"./js/unsharp":11,"./js/utils":12}],15:[function(require,module,exports){
 /* global navigator */
 /*eslint space-infix-ops:0*/
 
@@ -2327,7 +2322,7 @@ function terminate(id) {
 module.exports = resize_js_ww;
 module.exports.terminate = terminate;
 
-},{"./js/create_canvas":6,"./js/generate_id":7,"./js/pool":8,"./js/utils":11,"./js/worker.js":12,"webworkify":16}],15:[function(require,module,exports){
+},{"./js/create_canvas":7,"./js/generate_id":8,"./js/pool":9,"./js/utils":12,"./js/worker.js":13,"webworkify":17}],16:[function(require,module,exports){
 /*global window,document*/
 'use strict';
 
@@ -2613,7 +2608,7 @@ module.exports = function (from, to, options, callback) {
 
 module.exports.terminate = function () {};
 
-},{"./js/generate_id":7,"./js/unsharp":10}],16:[function(require,module,exports){
+},{"./js/generate_id":8,"./js/unsharp":11}],17:[function(require,module,exports){
 var bundleFn = arguments[3];
 var sources = arguments[4];
 var cache = arguments[5];
