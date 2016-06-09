@@ -1,3 +1,3 @@
 {
-  "upload_url": "http://localhost:3003/api/v1/images"
+  "upload_url": "https://tengam.org/photowall/api/v1/images"
 }

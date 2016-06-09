@@ -290,7 +290,7 @@ new App(document.querySelector('.app'));
 
 },{"./config.json":2,"exif-js":3,"pica":6}],2:[function(require,module,exports){
 module.exports={
-  "upload_url": "http://localhost:3003/api/v1/images"
+  "upload_url": "https://tengam.org/photowall/api/v1/images"
 }
 
 },{}],3:[function(require,module,exports){
