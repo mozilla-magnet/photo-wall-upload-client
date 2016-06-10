@@ -26,7 +26,7 @@
       position: relative;
       width: 100%;
       height: 100%;
-      color: #fff;
+      color: #444;
 
       max-width: 400px;
       max-height: 400px;
@@ -105,8 +105,17 @@
       display: block;
     }
 
+    .scaling {
+      display: none;
+    }
+
+    [state="scaling"] .scaling {
+      display: block;
+    }
+
     .confirmation {
       display: none;
+      color: #fff;
     }
 
     [state="uploaded"] .confirmation {

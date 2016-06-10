@@ -38,9 +38,9 @@ App.prototype = {
       '<div class="preview"></div>' +
       '<div class="canvas-overlay">' +
         '<label class="button-file-input">' +
-          'Pick Selfie' +
           '<input type="file" class="file-input"/>' +
         '</label>' +
+        '<h2 class="scaling">Resizing image</h2>' +
         '<button class="button-upload">Upload</button>' +
         '<button class="button-cancel">Cancel</button>' +
         '<h2 class="confirmation">Image uploaded</h2>' +
@@ -55,6 +55,8 @@ App.prototype = {
   },
 
   renderImage: function(file) {
+    this.setState('scaling');
+
     this.image = new ScaledImage(file, {
       width: 600,
       height: 600
@@ -69,7 +71,7 @@ App.prototype = {
   upload: function() {
     if (!(this.image && this.image.complete)) return;
     var self = this;
-    upload(this.image.toFile(), function(err) {
+    upload(this.image.toBlob(), this.image.name, function(err) {
       if (err) throw err;
       self.setState('uploaded');
       setTimeout(function() {
@@ -95,6 +97,7 @@ function ScaledImage(file, options) {
   this.canvas = document.createElement('canvas');
   this.canvas.width = options.width;
   this.canvas.height = options.height;
+  this.name = file.name;
   this.file = file;
   this.image = new Image();
 }
@@ -156,12 +159,10 @@ ScaledImage.prototype = {
     ctx.drawImage(image, -image.width / 2, -image.height / 2);
   },
 
-  toFile: function() {
+  toBlob: function() {
     var type = this.file.type;
-    var name = this.file.name;
     var uri = this.canvas.toDataURL(type)
-    var blob = dataUriToBlob(uri);
-    return new File([blob], name, { type: type });
+    return dataUriToBlob(uri, type);
   }
 };
 
@@ -194,6 +195,7 @@ function fill(parent, child) {
  */
 function applyOrientation(canvas, orientation) {
   switch (orientation) {
+    case 1: return canvas;
     case 2: return flipHorizontal(canvas);
     case 3: return rotate(canvas, 180);
     case 4: return flipVertical(canvas);
@@ -260,11 +262,11 @@ function getRotatedSize(size, deg) {
   }
 }
 
-function upload(file, callback) {
+function upload(blob, name, callback) {
   var formData = new FormData();
   var xhr = new XMLHttpRequest();
 
-  formData.append('image', file);
+  formData.append('image', blob, name);
   xhr.open('POST', UPLOAD_URL, true);
   xhr.send(formData);
 
@@ -274,7 +276,7 @@ function upload(file, callback) {
   };
 }
 
-function dataUriToBlob(string) {
+function dataUriToBlob(string, type) {
   var binary = atob(string.split(',')[1]);
   var array = [];
 
@@ -282,7 +284,7 @@ function dataUriToBlob(string) {
     array.push(binary.charCodeAt(i));
   }
 
-  return new Blob([new Uint8Array(array)]);
+  return new Blob([new Uint8Array(array)], { type: type });
 }
 
 new App(document.querySelector('.app'));
