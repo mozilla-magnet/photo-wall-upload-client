@@ -118,13 +118,12 @@ ScaledImage.prototype = {
     this.load(function() {
       self.getOrientation(function(err, orientation) {
         self.orientation = orientation;
-        self.downsample(function(err, canvas) {
-          URL.revokeObjectURL(self.image.src);
-          canvas = self.adjustAngle(canvas);
-          self.draw(canvas);
-          self.complete = true;
-          done(null);
-        });
+        var canvas = self.downsample();
+        URL.revokeObjectURL(self.image.src);
+        canvas = self.adjustAngle(canvas);
+        self.draw(canvas);
+        self.complete = true;
+        done(null);
       });
     });
   },
@@ -135,19 +134,14 @@ ScaledImage.prototype = {
     });
   },
 
-  downsample: function(done) {
-    var canvas = document.createElement('canvas');
-    var scaled = fill(this.canvas, {
+  downsample: function() {
+    var size = {
       width: this.naturalWidth,
       height: this.naturalHeight
-    });
+    };
 
-    canvas.width = scaled.width;
-    canvas.height = scaled.height;
-
-    pica.resizeCanvas(this.image, canvas, {}, function() {
-      done(null, canvas);
-    });
+    var scaled = fill(this.canvas, size);
+    return resizeImage(this.image, size, scaled);
   },
 
   adjustAngle: function(canvas) {
@@ -182,6 +176,38 @@ function fill(parent, child) {
     width: w,
     height: h
   };
+}
+
+function resizeImage(image, from, to) {
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d');
+  var steps = 2;
+  var pxPerStep = (from.width - to.width) / steps;
+  var w = from.width;
+  var h = from.height;
+
+  for (var i = 0; i < steps; i++) {
+    var w2 = w - pxPerStep;
+    var scale = w2 / w;
+    var h2 = h * scale;
+
+    canvas.width = w2;
+    canvas.height = h2;
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.drawImage(
+      image,
+      0,
+      0,
+      w2,
+      h2
+    );
+
+    w = w2;
+    h = h2;
+  }
+
+  return canvas;
 }
 
 /**
