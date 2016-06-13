@@ -6,7 +6,6 @@
 
 var UPLOAD_URL = require('./config.json').upload_url;
 var exif = require('exif-js');
-var pica = require('pica');
 
 function App(el) {
   this.el = el;

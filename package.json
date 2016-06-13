@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.html",
   "dependencies": {
-    "exif-js": "^2.1.1",
-    "pica": "^2.0.2"
+    "exif-js": "^2.1.1"
   },
   "devDependencies": {
     "browserify": "^13.0.1"
