@@ -13,6 +13,7 @@
       height: 100%;
       margin: 0;
       font: 16px 'Fira Sans';
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
 
     h2 {
@@ -41,8 +42,10 @@
         0px 1px 3px 0px rgba(0,0,0,0.21),
         0px 2px 10px 0px rgba(0,0,0,0.13);
       border-radius: 4px;
-      -moz-user-select: none;
-      user-select: none;
+
+      -webkit-user-select: none;
+         -moz-user-select: none;
+              user-select: none;
     }
 
     .button:active {
@@ -177,7 +180,7 @@
     }
   </style>
 </head>
-<body>
+<body ontouchstart>
 <div class="app"></div>
 <script src="app.built.js"></script>
 </body>
