@@ -36,13 +36,17 @@ App.prototype = {
     return '<div class="container">' +
       '<div class="preview"></div>' +
       '<div class="canvas-overlay">' +
-        '<label class="button-file-input">' +
-          '<input type="file" class="file-input"/>' +
+        '<label class="button button-file-input">Add Photo' +
+          '<small>to Magnet photo wall</small>' +
+          '<input type="file" class="file-input" hidden/>' +
         '</label>' +
-        '<h2 class="scaling">Resizing image</h2>' +
-        '<button class="button-upload">Upload</button>' +
-        '<button class="button-cancel">Cancel</button>' +
-        '<h2 class="confirmation">Image uploaded</h2>' +
+        '<button class="button button-upload">Upload</button>' +
+        '<div class="bottom">' +
+          '<button class="button button-cancel">Cancel</button>' +
+        '</div>' +
+        '<h2 class="scaling">Resizing image &hellip;</h2>' +
+        '<h2 class="uploading">Uploading &hellip;</h2>' +
+        '<h2 class="confirmation">Uploaded</h2>' +
       '</div>' +
     '</div>';
   },
@@ -70,12 +74,13 @@ App.prototype = {
   upload: function() {
     if (!(this.image && this.image.complete)) return;
     var self = this;
+    this.setState('uploading');
     upload(this.image.toBlob(), this.image.name, function(err) {
       if (err) throw err;
       self.setState('uploaded');
       setTimeout(function() {
         self.clear();
-      }, 3000);
+      }, 1200);
     });
   },
 
